@@ -15,6 +15,7 @@ from xml.sax.handler import ContentHandler
 from xml.sax import make_parser
 import sys
 
+
 class myContentHandler(ContentHandler):
 
     def __init__ (self):
@@ -32,17 +33,21 @@ class myContentHandler(ContentHandler):
                 self.inContent = True
 
     def endElement (self, name):
+
         if name == 'item':
             self.inItem = False
         elif self.inItem:
             if name == 'title':
                 line = "Title: " + self.theContent + "."
-                # To avoid Unicode trouble
-                print (line.encode('utf-8'))
+                myfile.write("<li>" + '\n' + "Titulo: " + line + "</li>" + '\n')
+                print(line)
                 self.inContent = False
                 self.theContent = ""
             elif name == 'link':
-                print ("Link: " + self.theContent + ".")
+                link = self.theContent
+                print(link)
+                myfile.write("<li><a href=" + link + ">Link</a></li>")
+
                 self.inContent = False
                 self.theContent = ""
 
@@ -57,15 +62,20 @@ if len(sys.argv)<2:
     print ("<document>: file name of the document to parse")
     sys.exit(1)
 
-# Load parser and driver
+myfile = open('/home/alumnos/nalonso/Documentos/saro/GitHub/X-Serv-XML-Barrapunto/Modificaciones/index.html', 'w')
+
+html = "<!DOCTYPE html>" + '\n' + "<html>" + '\n' + "<head>" + '\n' + "HTML CON TITULOS Y LINKS DE BARRAPUNTO" + '\n' + "</head>"+ '\n' + "<body>"+ '\n' + "<ul>"
+myfile.write(html + '\n')
 
 theParser = make_parser()
 theHandler = myContentHandler()
 theParser.setContentHandler(theHandler)
 
-# Ready, set, go!
-
 xmlFile = open(sys.argv[1],"r")
 theParser.parse(xmlFile)
+
+html = "</ul>" + '\n' + "</body>" + '\n' + "</html>"
+myfile.write(html + '\n')
+
 
 print ("Parse complete")
