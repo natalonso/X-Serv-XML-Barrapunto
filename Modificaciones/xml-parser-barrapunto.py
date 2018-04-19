@@ -15,6 +15,7 @@ from xml.sax.handler import ContentHandler
 from xml.sax import make_parser
 import sys
 
+#MODIFICAR PARA QUE SE DESCARGUE DESDE AQUI EL RSS
 
 class myContentHandler(ContentHandler):
 
@@ -38,8 +39,8 @@ class myContentHandler(ContentHandler):
             self.inItem = False
         elif self.inItem:
             if name == 'title':
-                line = "Title: " + self.theContent + "."
-                myfile.write("<li>" + '\n' + "Titulo: " + line + "</li>" + '\n')
+                line = "Titulo: " + self.theContent + "."
+                myfile.write("<li>" + '\n' + line + "</li>" + '\n')
                 print(line)
                 self.inContent = False
                 self.theContent = ""
