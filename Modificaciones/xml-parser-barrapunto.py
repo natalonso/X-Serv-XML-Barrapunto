@@ -11,11 +11,10 @@
 # Just prints the news (and urls) in BarraPunto.com,
 #  after reading the corresponding RSS channel.
 
+import urllib.request
 from xml.sax.handler import ContentHandler
 from xml.sax import make_parser
 import sys
-
-#MODIFICAR PARA QUE SE DESCARGUE DESDE AQUI EL RSS
 
 class myContentHandler(ContentHandler):
 
@@ -64,7 +63,6 @@ if len(sys.argv)<2:
     sys.exit(1)
 
 myfile = open('/home/alumnos/nalonso/Documentos/saro/GitHub/X-Serv-XML-Barrapunto/Modificaciones/index.html', 'w')
-
 html = "<!DOCTYPE html>" + '\n' + "<html>" + '\n' + "<head>" + '\n' + "HTML CON TITULOS Y LINKS DE BARRAPUNTO" + '\n' + "</head>"+ '\n' + "<body>"+ '\n' + "<ul>"
 myfile.write(html + '\n')
 
@@ -72,7 +70,8 @@ theParser = make_parser()
 theHandler = myContentHandler()
 theParser.setContentHandler(theHandler)
 
-xmlFile = open(sys.argv[1],"r")
+xmlFile = urllib.request.urlopen('http://barrapunto.com/index.rss')
+print("XML FILE: " + str(xmlFile))
 theParser.parse(xmlFile)
 
 html = "</ul>" + '\n' + "</body>" + '\n' + "</html>"
